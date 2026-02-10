@@ -1,4 +1,34 @@
+const getSuggestionAPI=(searchText)=>{
+    console.log("API CALLED",searchText);
+    const request=fetch(`https://youtube138.p.rapidapi.com/auto-complete/?q=${searchText}&hl=en&gl=US`,{
+        method:'GET',
+        headers:{
+            "x-rapidapi-host":"youtube138.p.rapidapi.com",
+	        "x-rapidapi-key":"4f919f749fmsh7b06359c9034437p196dd2jsnb6aac1e69eea"
+        },
+    });
 
+    request.then((response)=>{
+        const pr2=response.json();
+        pr2.then((data)=>{
+            console.log("result",data);
+        });
+    })
+    .catch((err)=>{
+        alert("Suggestion Error:",err.message);
+    });
+    
+
+};
+
+let id=null;
+const getSmartSuggestionAPI=(txt)=>{
+    clearTimeout(id);
+    
+    id=setTimeout(()=>{
+        getSuggestionAPI(txt);
+    },1000);
+};
 
 const data ={
     "status": "success",
@@ -1624,8 +1654,9 @@ const data ={
             "hasCaptions": false
         }
     ]
-}
-console.log(data);
+};
+
+
 const rootElem=document.getElementById('root');
 
 const showTrendingVideos = () =>{
@@ -1660,3 +1691,11 @@ const showTrendingVideos = () =>{
     });
 };
 showTrendingVideos();
+
+const handleAutoSuggest=(e)=>{
+    const searchText=e.target.value;
+
+    getSmartSuggestionAPI(searchText);
+
+
+}
